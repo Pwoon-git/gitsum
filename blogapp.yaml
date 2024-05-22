@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blogapp
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-app
+  template:
+    metadata:
+      labels:
+        app: blog-app
+    spec:
+      containers:
+      - name: blog
+        image: 789350153589.dkr.ecr.us-east-1.amazonaws.com/woonsworld:latest
+        ports:
+        - containerPort: 3000
