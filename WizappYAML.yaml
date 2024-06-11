@@ -72,40 +72,6 @@ spec:
               apiVersion: v1
               fieldPath: metadata.namespace
             path: namespace
-status:
-  conditions:
-  - lastProbeTime: null
-    lastTransitionTime: "2024-05-16T16:32:28Z"
-    status: "True"
-    type: PodReadyToStartContainers
-  - lastProbeTime: null
-    lastTransitionTime: "2024-05-16T16:31:54Z"
-    status: "True"
-    type: Initialized
-  - lastProbeTime: null
-    lastTransitionTime: "2024-05-16T16:32:28Z"
-    status: "True"
-    type: Ready
-  - lastProbeTime: null
-    lastTransitionTime: "2024-05-16T16:32:28Z"
-    status: "True"
-    type: ContainersReady
-  - lastProbeTime: null
-    lastTransitionTime: "2024-05-16T16:31:54Z"
-    status: "True"
-    type: PodScheduled
-  containerStatuses:
-  - containerID: containerd://a5478bb2cc07d55416d9e6e7e80c87ec16e193169439ebdd4f2c7bd54279bb50
-    image: 789350153589.dkr.ecr.us-east-1.amazonaws.com/woonsworld:latest
-    imageID: 789350153589.dkr.ecr.us-east-1.amazonaws.com/woonsworld@sha256:38b712c061850f2a89934c361c75c16ebdeeae0f5c5b3eb0f1a1b18a5b4a9641
-    lastState: {}
-    name: woonsworld
-    ready: true
-    restartCount: 0
-    started: true
-    state:
-      running:
-        startedAt: "2024-05-16T16:32:28Z"
   hostIP: 192.168.12.68
   hostIPs:
   - ip: 192.168.12.68
