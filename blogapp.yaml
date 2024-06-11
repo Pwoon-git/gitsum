@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: blog
-        image: 789350153589.dkr.ecr.us-east-1.amazonaws.com/woonsworld:latest
+        image: 789350153589.dkr.ecr.us-east-1.amazonaws.com/woonsworld:
         ports:
         - containerPort: 3000
