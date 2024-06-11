@@ -18,5 +18,3 @@ spec:
         image: 789350153589.dkr.ecr.us-east-1.amazonaws.com/woonsworld:latest
         ports:
         - containerPort: 8080
-        podIPs:
-        - ip: 192.168.0.172
