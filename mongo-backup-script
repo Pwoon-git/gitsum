@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Variables
+TIMESTAMP=$(date +"%F")
+BACKUP_DIR="/path/to/backup/directory"
+S3_BUCKET="s3://your-s3-bucket-name"
+MONGO_USER="yourMongoUser"
+MONGO_PASS="yourMongoPass"
+MONGO_HOST="localhost"
+MONGO_PORT="27017"
+MONGO_DB="yourDatabaseName"
+
+# Create backup directory if it doesn't exist
+mkdir -p ${BACKUP_DIR}/${TIMESTAMP}
+
+# Run mongodump
+mongodump --host ${MONGO_HOST} --port ${MONGO_PORT} --username ${MONGO_USER} --password ${MONGO_PASS} --db ${MONGO_DB} --out ${BACKUP_DIR}/${TIMESTAMP}
+
+# Compress backup
+tar -czvf ${BACKUP_DIR}/${TIMESTAMP}.tar.gz -C ${BACKUP_DIR} ${TIMESTAMP}
+
+# Upload to S3
+aws s3 cp ${BACKUP_DIR}/${TIMESTAMP}.tar.gz ${S3_BUCKET}/${TIMESTAMP}.tar.gz
+
+# Clean up
+rm -rf ${BACKUP_DIR}/${TIMESTAMP}
+rm ${BACKUP_DIR}/${TIMESTAMP}.tar.gz
