@@ -1,0 +1,57 @@
+const AWS = require('aws-sdk');
+const fs = require('fs');
+const path = require('path');
+
+// Configure AWS SDK
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
+
+// Path to the backup directory
+const backupDir = '/path/to/backup/directory';
+const bucketName = 'your-s3-bucket-name';
+
+function uploadDirectory(directoryPath, bucketName, prefix = '') {
+    fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+            console.error('Could not list the directory.', err);
+            process.exit(1);
+        }
+
+        files.forEach((file) => {
+            const filePath = path.join(directoryPath, file);
+            const fileKey = path.join(prefix, file);
+
+            fs.stat(filePath, (error, stat) => {
+                if (error) {
+                    console.error('Error stating file.', error);
+                    return;
+                }
+
+                if (stat.isFile()) {
+                    const fileStream = fs.createReadStream(filePath);
+                    const uploadParams = {
+                        Bucket: bucketName,
+                        Key: fileKey,
+                        Body: fileStream
+                    };
+
+                    s3.upload(uploadParams, (uploadErr, data) => {
+                        if (uploadErr) {
+                            console.error('Error uploading file.', uploadErr);
+                        } else {
+                            console.log(`Successfully uploaded ${file} to ${data.Location}`);
+                        }
+                    });
+                } else if (stat.isDirectory()) {
+                    uploadDirectory(filePath, bucketName, fileKey);
+                }
+            });
+        });
+    });
+}
+
+// Start the upload process
+uploadDirectory(backupDir, bucketName);
