@@ -1,0 +1,43 @@
+package main
+
+import (
+    "encoding/json"
+    "net/http"
+    admissionv1 "k8s.io/api/admission/v1"
+    "k8s.io/apimachinery/pkg/runtime"
+    "k8s.io/apimachinery/pkg/runtime/serializer"
+)
+
+var (
+    scheme = runtime.NewScheme()
+    codecs = serializer.NewCodecFactory(scheme)
+    deserializer = codecs.UniversalDeserializer()
+)
+
+func main() {
+    http.HandleFunc("/mutate", handleMutate)
+    http.ListenAndServe(":8080", nil)
+}
+
+func handleMutate(w http.ResponseWriter, r *http.Request) {
+    var admissionReview admissionv1.AdmissionReview
+    if err := json.NewDecoder(r.Body).Decode(&admissionReview); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    // Logic to mutate the object
+    // ...
+
+    admissionReview.Response = &admissionv1.AdmissionResponse{
+        Allowed: true,
+        // Patch, UID, etc.
+    }
+
+    respBytes, err := json.Marshal(admissionReview)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    w.Write(respBytes)
+}
